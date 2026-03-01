@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
-import { HeaderSticky } from "../../components/HomePageComponents/HeaderSticky";
-import { InputPublicar } from "../../components/HomePageComponents/InputPublicar";
-import { PublicacionCard } from "../../components/HomePageComponents/PublicacionCard";
+import { HeaderSticky } from "../components/HomePageComponents/HeaderSticky";
+import { InputPublicar } from "../components/HomePageComponents/InputPublicar";
+import { PublicacionCard } from "../components/HomePageComponents/PublicacionCard";
 
 export const HomePage = () => {
   return (

@@ -1,4 +1,5 @@
 import { Icon } from "@iconify/react";
+import { PostImageFrame } from "./PostImageFrame";
 
 export const PublicacionCard = () => {
   return (
@@ -13,9 +14,26 @@ export const PublicacionCard = () => {
           <span className="font-bold">Nombre de usuario</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-gray-500 text-sm whitespace-nowrap">Hace 8 horas</span>
+          <span className="text-gray-500 text-sm whitespace-nowrap">
+            Hace 8 horas
+          </span>
           <button>
             <Icon icon="tabler:dots-filled" width="24" height="24" />
+          </button>
+        </div>
+      </div>
+      <div className="mt-3">
+        <p className="mb-2">Titulo</p>
+        <div>
+          <PostImageFrame src={"https://m.media-amazon.com/images/M/MV5BNzU2ZjVmMTEtYTA4Mi00ZTQ0LWE0NzktNTRhZDUxYWMyY2FjXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg"}></PostImageFrame>
+        </div>
+        <div className="flex justify-between mt-4">
+          <button>
+            <Icon icon="line-md:heart" width="24" height="24" className="text-3xl p-1 rounded-full text-gray-400 hover:bg-[rgba(78,124,233,0.2)] cursor-pointer "/>
+          </button>
+          <button className="flex items-center gap-2 cursor-pointer">
+            <Icon icon="line-md:chat" width="24" height="24" className="text-3xl p-1 rounded-full text-gray-400 cursor-pointer" />
+            <span className="text-xs md:text-sm text-gray-400">Comentar</span>
           </button>
         </div>
       </div>

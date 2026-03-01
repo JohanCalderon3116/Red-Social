@@ -1,12 +1,28 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { HomePage } from "./pages/HomePage";
+import { HomePage } from "../pages/HomePage";
 import { MainLayout } from "../layouts/MainLayout";
-
+import { LoginPage } from "../pages/LoginPage";
+import { ProtectedRoute } from "../Hooks/ProtectedRoute";
 export function MyRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainLayout></MainLayout>}>
+        <Route
+          path="/login"
+          element={
+            <ProtectedRoute authenticated={false}>
+              <LoginPage></LoginPage>
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute authenticated={true}>
+              <MainLayout></MainLayout>
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<HomePage></HomePage>}></Route>
         </Route>
       </Routes>
