@@ -3,6 +3,7 @@ import { HomePage } from "../pages/HomePage";
 import { MainLayout } from "../layouts/MainLayout";
 import { LoginPage } from "../pages/LoginPage";
 import { ProtectedRoute } from "../Hooks/ProtectedRoute";
+import { MiPerfilPage } from "../pages/MiPerfilPage";
 export function MyRoutes() {
   return (
     <BrowserRouter>
@@ -24,6 +25,7 @@ export function MyRoutes() {
           }
         >
           <Route index element={<HomePage></HomePage>}></Route>
+          <Route path="/mi-perfil" element={<MiPerfilPage></MiPerfilPage>}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

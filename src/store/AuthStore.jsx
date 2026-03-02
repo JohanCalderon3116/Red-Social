@@ -12,6 +12,9 @@ export const useAuthStore = create((set) => ({
     });
     return data.user;
   },
+  cerrarSesion: async () => {
+    await supabase.auth.signOut();
+  }
 }));
 
 export const useSubcription = create((set) => {
@@ -23,6 +26,7 @@ export const useSubcription = create((set) => {
   supabase.auth.getSession().then(({ data: { session } }) => {
     if (session?.user) {
       set({ user: session.user });
+      console.log("user", session.user)
     }
   });
 
