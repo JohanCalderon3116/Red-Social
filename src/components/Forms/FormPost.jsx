@@ -1,20 +1,43 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUsuariosStore } from "../../store/UsuariosStore";
 import { BtnClose } from "../ui/buttons/BtnClose";
 import EmojiPicker from "emoji-picker-react";
 import { Icon } from "@iconify/react";
+import { ImageSelector } from "../../Hooks/useImageSelector";
 export const FormPost = () => {
   const { dataUsuarioAuth } = useUsuariosStore();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const textareRef = useRef(null);
-  const [postTecxt, setPosText] = useState("");
+  const pickerRef = useRef(null);
+  const [postText, setPostText] = useState("");
   const addEmoji = (emojiData) => {
     const emojiChar = emojiData.emoji;
     const textarea = textareRef.current;
-    const etart = textarea.selectionStart;
+    if (!textarea) return;
+    const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
-    
+    const originalText = textarea.value;
+
+    const newText =
+      originalText.substring(0, start) +
+      emojiChar +
+      originalText.substring(end);
+
+    setPostText(newText);
   };
+  const handleTextChange = (e) => {
+    setPostText(e.target.value);
+  };
+
+  useEffect(() => {
+    const hundleClickOutside = (e) => {
+      if (pickerRef.current && !pickerRef.current.contains(e.target))
+        //si estamos fuera del are como tal
+        setShowEmojiPicker(false);
+    };
+    document.addEventListener("mousedown", hundleClickOutside);
+    return () => document.removeEventListener("mousedown", hundleClickOutside);
+  }, []);
   return (
     <section className="fixed z-50 flex items-center justify-center inset-0">
       <div className="absolute backdrop-blur-sm cursor-pointer inset-0"></div>
@@ -39,14 +62,20 @@ export const FormPost = () => {
             <div className="relative">
               <textarea
                 ref={textareRef}
+                value={postText}
+                onChange={handleTextChange}
                 placeholder="¿Qué estás pensando?"
                 className="w-full placeholder-gray-500 outline-none"
               ></textarea>
               {showEmojiPicker && (
-                <div className="absolute top-10 left-10 mt-2 transition duration-300">
+                <div
+                  className="absolute top-10 left-10 mt-2 transition duration-300"
+                  ref={pickerRef}
+                >
                   <EmojiPicker
                     theme="auto"
                     onEmojiClick={addEmoji}
+                    searchDisabled
                   ></EmojiPicker>
                 </div>
               )}
@@ -71,7 +100,18 @@ export const FormPost = () => {
               </div>
             </div>
           </form>
+          <ImageSelector></ImageSelector>
         </main>
+        <footer className="p-4 border-t border-gray-500/40">
+          <div className="flex items-center justify-between p-3 border border-gray-500/40 rounded-lg">
+            <span>Agregar a tu publicación</span>
+            <div className="flex space-x-4">
+              <button className="p-1 rounded-full text-black/50 dark:text-white/50 hover:bg-gray-200 dark:hover:bg-gray-700">
+                <Icon icon="line-md:image" width="24" height="24" />
+              </button>
+            </div>
+          </div>
+        </footer>
         <footer></footer>
       </section>
     </section>
