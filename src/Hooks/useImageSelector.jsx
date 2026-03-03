@@ -53,6 +53,40 @@ export const useImageSelector = () => {
       setFileType("video");
     }
   };
+  const removeImage = () => {
+    setFile(null);
+    setFileUrl("");
+    setFileType("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsGragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsGragging(false);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsGragging(true);
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsGragging(false);
+    const droppedFile = e.dataTransfer.files[0];
+    if (!droppedFile) return;
+    await handleImageChange({ target: { files: [droppedFile] } });
+  };
   return {
     file,
     fileUrl,
@@ -60,10 +94,17 @@ export const useImageSelector = () => {
     fileInputRef,
     handleImageChange,
     openFileSelector,
+    removeImage,
+    isDragging,
+    handleDragEnter,
+    handleDragLeave,
+    handleDrop,
+    handleDragOver,
   };
 };
 
 export const ImageSelector = () => {
+  const { setStateImage } = usePostStore();
   const {
     file,
     fileUrl,
@@ -71,16 +112,31 @@ export const ImageSelector = () => {
     fileInputRef,
     handleImageChange,
     openFileSelector,
+    removeImage,
+    isDragging,
+    handleDragEnter,
+    handleDragLeave,
+    handleDrop,
+    handleDragOver,
   } = useImageSelector();
   return (
     <section className="relative w-full max-w-md bg-[#242526] rounded-lg shadow-xl overflow-hidden ">
       <header className="relative h-12 flex items-center justify-center border-b border-gray-700">
         <h2>Agregar Fotos/Videos</h2>
-        <button className="absolute right-4 text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer">
+        <button
+          onClick={setStateImage}
+          className="absolute right-4 text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer"
+        >
           <Icon icon="line-md:close-circle-twotone" width="20" height="20" />
         </button>
       </header>
-      <main className="p-8 flex flex-col items-center justify-center min-h-[240px] transition-colors duration-300 ">
+      <main
+        className={`p-8 flex flex-col items-center justify-center min-h-[240px] transition-colors duration-300 ${isDragging ? "bg-[#3a3b3c] " : "bg-[#242526]"}`}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+      >
         {fileUrl ? (
           <div className="relative inline-block group">
             {fileType === "image" ? (
@@ -90,12 +146,13 @@ export const ImageSelector = () => {
               ></img>
             ) : (
               <video
-              controls
+                controls
                 src={fileUrl}
                 className="w-full max-w-[280px] max-h-[280px] rounded-lg object-contain "
               ></video>
             )}
             <button
+              onClick={removeImage}
               type="button"
               className="absolute top-2 right-2 w-8 h-8 bg-black rounded-full border-none cursor-pointer flex items-center justify-center transition duration-300 opacity-0 group-hover:opacity-100 hover:opacity-80"
             >
@@ -134,6 +191,7 @@ export const ImageSelector = () => {
       <input
         type="file"
         accept="image/*,video/*"
+        className="hidden"
         ref={fileInputRef}
         onChange={handleImageChange}
       />
