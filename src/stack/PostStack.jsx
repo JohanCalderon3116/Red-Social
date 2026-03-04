@@ -1,11 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
-import { usePostStore } from "../store/PostStore";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { useFormattedDate } from "../Hooks/useFormattedDate";
 import { useUsuariosStore } from "../store/UsuariosStore";
 import { toast } from "sonner";
+import { usePostStore } from "../store/PostStore";
 
 export const useInsertarPostMutate = () => {
-  const { insertarPost, file } = usePostStore();
+  const { insertarPost, file, setStateForm, setFile } = usePostStore();
   const fechaActual = useFormattedDate();
   const { dataUsuarioAuth } = useUsuariosStore();
   return useMutation({
@@ -30,6 +30,44 @@ export const useInsertarPostMutate = () => {
     },
     onSuccess: () => {
       toast.success("Publicado :3");
+      setStateForm(false);
+      setFile(null);
     },
+  });
+};
+export const useLikePostMutate = () => {
+  const { likePost, itemSelect } = usePostStore();
+  const { dataUsuarioAuth } = useUsuariosStore();
+  return useMutation({
+    mutationKey: ["like post"],
+    mutationFn: () =>
+      likePost({ p_post_id: itemSelect?.id, p_user_id: dataUsuarioAuth?.id }),
+    onError: (error) => {
+      toast.error("Error al dar like: " + error.message);
+    },
+  });
+};
+export const useMostrarPostQuery = () => {
+  const { dataUsuarioAuth } = useUsuariosStore();
+  const { mostrarPost } = usePostStore();
+  const cant_pagina = 10;
+  return useInfiniteQuery({
+    queryKey: ["mostrar post", { id_usuario: dataUsuarioAuth?.id }],
+    queryFn: async ({ pageParam = 0 }) => {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const data = mostrarPost({
+        id_usuario: dataUsuarioAuth?.id,
+        desde: pageParam,
+        hasta: cant_pagina,
+      });
+      return data;
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      if (!lastPage || lastPage.length < cant_pagina) {
+        return undefined;
+      }
+      return allPages.length * cant_pagina;
+    },
+    initialPageParam: 0,
   });
 };
