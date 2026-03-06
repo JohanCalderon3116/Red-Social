@@ -120,7 +120,7 @@ export const ImageSelector = () => {
     handleDragOver,
   } = useImageSelector();
   return (
-    <section className="relative w-full max-w-md bg-[#242526] rounded-lg shadow-xl overflow-hidden ">
+    <section className="relative w-full max-w-md bg-[#E1E5EA] dark:bg-[#242526] border border-gray-500 rounded-lg shadow-xl overflow-hidden dark:text-white">
       <header className="relative h-12 flex items-center justify-center border-b border-gray-700">
         <h2>Agregar Fotos/Videos</h2>
         <button
@@ -131,7 +131,8 @@ export const ImageSelector = () => {
         </button>
       </header>
       <main
-        className={`p-8 flex flex-col items-center justify-center min-h-[240px] transition-colors duration-300 ${isDragging ? "bg-[#3a3b3c] " : "bg-[#242526]"}`}
+        className={`p-8 flex flex-col items-center justify-center min-h-[240px] transition-colors duration-300 ${isDragging ? "bg-gray-200 dark:bg-[#3a3b3c]"
+      : "bg-gray-100 dark:bg-[#242526]"}`}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
@@ -172,16 +173,16 @@ export const ImageSelector = () => {
           </div>
         ) : (
           <>
-            <div className="w-16 h-16 rounded-full bg-[#3a3b3c] flex items-center justify-center mb-4 ">
+            <div className="w-16 h-16 rounded-full bg-[#E1E5EA] dark:bg-[#3a3b3c] flex items-center justify-center mb-4 ">
               <Icon icon="mingcute:video-line" width="24" height="24" />
             </div>
-            <h3 className="text-white text-lg font-medium mb-1">
+            <h3 className="dark:text-white text-lg font-medium mb-1">
               Agregar fotos/videos
             </h3>
-            <p className="text-gray-400 text-sm">Arrastra o suelta aquí</p>
+            <p className="dark:text-gray-400 text-sm">Arrastra o suelta aquí</p>
             <button
               onClick={openFileSelector}
-              className="mt-6 px-2 py-2 bg-[#3a3b3c] text-white rounded-lg hover:bg-[#4a4b4c] transition-colors duration-200 cursor-pointer"
+              className="mt-6 px-2 py-2 bg-violet-800 text-white rounded-lg hover:bg-violet-950 transition-colors duration-200 cursor-pointer"
             >
               Seleccionar archivos
             </button>

@@ -4,6 +4,7 @@ import { PostVideoFrame } from "./PostVideoFrame";
 import { usePostStore } from "../../store/PostStore";
 import { useLikePostMutate } from "../../stack/PostStack";
 import { useComentariosStore } from "../../store/ComentariosStore";
+import { useRelativeTime } from "../../Hooks/useRelativeTime";
 
 export const PublicacionCard = ({ item }) => {
   const { setItemSelect } = usePostStore();
@@ -14,15 +15,15 @@ export const PublicacionCard = ({ item }) => {
       <div className="flex justify-between">
         <div className="flex items-center gap-3">
           <img
-            src="https://external-preview.redd.it/fHHi65D3LkeoGXeQ23nOs9VFEqywjamVLw7DZs3Z0VA.jpg?width=640&crop=smart&auto=webp&s=5be6c11532404417b51f415dbed730ebd1039ffc"
+            src={item?.foto_usuario}
             alt=""
             className="w-12 h-12 rounded-full object-cover"
           />
-          <span className="font-bold">Nombre de usuario</span>
+          <span className="font-bold"> {item?.nombre_usuario} </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-gray-500 text-sm whitespace-nowrap">
-            Hace 8 horas
+            {useRelativeTime(item?.fecha)}
           </span>
           <button>
             <Icon icon="tabler:dots-filled" width="24" height="24" />
@@ -58,8 +59,7 @@ export const PublicacionCard = ({ item }) => {
           </button>
           <button
             onClick={() => {
-              setItemSelect(item),
-              setShowModal()
+              (setItemSelect(item), setShowModal());
             }}
             className="flex items-center gap-2 cursor-pointer"
           >
@@ -80,7 +80,12 @@ export const PublicacionCard = ({ item }) => {
             </span>
           )}
           {item?.comentarios_count > 0 && (
-            <span className="text-xs text-gray-400 cursor-pointer hover:underline ">
+            <span
+              onClick={() => {
+                (setItemSelect(item), setShowModal());
+              }}
+              className="text-xs text-gray-400 cursor-pointer hover:underline "
+            >
               {" "}
               {item?.comentarios_count} Comentarios
             </span>

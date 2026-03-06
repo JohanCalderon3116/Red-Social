@@ -79,7 +79,7 @@ export const FormPost = () => {
               ></textarea>
               {showEmojiPicker && (
                 <div
-                  className="absolute top-10 left-10 mt-2 transition duration-300"
+                  className="absolute top-10 left-10 mt-2 transition duration-300 z-1"
                   ref={pickerRef}
                 >
                   <EmojiPicker
@@ -100,7 +100,7 @@ export const FormPost = () => {
                 <button
                   onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                   type="button"
-                  className="p-1 text-black/50 dark:text-white/50 hover:bg-gray-700 rounded-full cursor-pointer transition duration-300"
+                  className="p-1 text-black/50 dark:text-white/50 dark:hover:bg-gray-700 hover:bg-gray-200 rounded-full cursor-pointer transition duration-300"
                 >
                   <Icon
                     icon="line-md:emoji-smile-wink"

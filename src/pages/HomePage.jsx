@@ -12,12 +12,15 @@ import { useSupabaseSubscription } from "../Hooks/useSupabaseSubscription";
 import { ComentarioModal } from "../components/HomePageComponents/ComentarioModal";
 import { useComentariosStore } from "../store/ComentariosStore";
 import { useMostrarRespuestaComentarioQuery } from "../stack/RespuestasComentariosStack";
+import { FormActualizarPerfil } from "../components/Forms/FormActualizarPerfil";
+import { useUsuariosStore } from "../store/UsuariosStore";
 
 export const HomePage = () => {
   const { stateForm, setStateForm, itemSelect } = usePostStore();
   const { showModal } = useComentariosStore();
   const { data: dataRespuestaComentario } =
     useMostrarRespuestaComentarioQuery();
+  const { dataUsuarioAuth } = useUsuariosStore();
   const {
     data: dataPost,
     fetchNextPage,
@@ -58,9 +61,17 @@ export const HomePage = () => {
     options: { event: "*", schema: "public", table: "comentarios" },
     querykey: ["mostrar comentarios"],
   });
+  useSupabaseSubscription({
+    channelName: "public:usuarios",
+    options: { event: "*", schema: "public", table: "usuarios" },
+    querykey: ["contar usuarios todos"],
+  });
   return (
     <main className="flex min-h-screen bg-white dark:bg-bg-dark max-w-[1200px] mx-auto">
       {stateForm && <FormPost></FormPost>}
+      {dataUsuarioAuth?.foto_perfil === "-" && (
+        <FormActualizarPerfil></FormActualizarPerfil>
+      )}
       <Toaster richColors></Toaster>
       <section className="flex flex-col w-full h-screen">
         <article className="flex flex-col h-screen overflow-hidden border border-gray-200 border-t-0 border-b-0 dark:border-gray-600">

@@ -80,7 +80,7 @@ export const InputRespuestaComentario = () => {
         <section className="flex justify-end">
           <button
             onClick={() => comentarioMutate()}
-            className="flex justify-end gap-1 px-4 py-2 rounded-full text-sm text-gray-500 cursor-not-allowed"
+            className={`flex justify-end gap-1 px-4 py-2 rounded-full text-sm text-gray-500 cursor-not-allowed ${comentario.trim()==="" ? "cursor-not-allowed bg-gray-600/20 hover:bg-gray-700/20" : "cursor-pointer bg-violet-700 text-white hover:bg-violet-800"}`}
           >
             <Icon icon="line-md:external-link-rounded" width="24" height="24" />
             Publicar
