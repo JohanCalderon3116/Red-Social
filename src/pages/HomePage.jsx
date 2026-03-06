@@ -10,9 +10,14 @@ import { SpinnerLocal } from "../components/ui/spinners/SpinnerLocal";
 import { usePostStore } from "../store/PostStore";
 import { useSupabaseSubscription } from "../Hooks/useSupabaseSubscription";
 import { ComentarioModal } from "../components/HomePageComponents/ComentarioModal";
+import { useComentariosStore } from "../store/ComentariosStore";
+import { useMostrarRespuestaComentarioQuery } from "../stack/RespuestasComentariosStack";
 
 export const HomePage = () => {
-  const { stateForm, setStateForm } = usePostStore();
+  const { stateForm, setStateForm, itemSelect } = usePostStore();
+  const { showModal } = useComentariosStore();
+  const { data: dataRespuestaComentario } =
+    useMostrarRespuestaComentarioQuery();
   const {
     data: dataPost,
     fetchNextPage,
@@ -43,6 +48,16 @@ export const HomePage = () => {
     options: { event: "*", schema: "public", table: "publicaciones" },
     querykey: ["mostrar post"],
   });
+  useSupabaseSubscription({
+    channelName: "public:respuestas_comentarios",
+    options: { event: "*", schema: "public", table: "respuestas_comentarios" },
+    querykey: ["mostrar respuesta comentarios"],
+  });
+  useSupabaseSubscription({
+    channelName: "public:comentarios",
+    options: { event: "*", schema: "public", table: "comentarios" },
+    querykey: ["mostrar comentarios"],
+  });
   return (
     <main className="flex min-h-screen bg-white dark:bg-bg-dark max-w-[1200px] mx-auto">
       {stateForm && <FormPost></FormPost>}
@@ -70,7 +85,7 @@ export const HomePage = () => {
         </article>
         <article>Sidebar derecho</article>
       </section>
-      <ComentarioModal></ComentarioModal>
+      {showModal && <ComentarioModal></ComentarioModal>}
     </main>
   );
 };

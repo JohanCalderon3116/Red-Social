@@ -3,10 +3,12 @@ import { PostImageFrame } from "./PostImageFrame";
 import { PostVideoFrame } from "./PostVideoFrame";
 import { usePostStore } from "../../store/PostStore";
 import { useLikePostMutate } from "../../stack/PostStack";
+import { useComentariosStore } from "../../store/ComentariosStore";
 
 export const PublicacionCard = ({ item }) => {
   const { setItemSelect } = usePostStore();
   const { mutate } = useLikePostMutate();
+  const { setShowModal } = useComentariosStore();
   return (
     <div className="border-b border-gray-500/50 p-4">
       <div className="flex justify-between">
@@ -54,7 +56,13 @@ export const PublicacionCard = ({ item }) => {
               className={`text-3xl p-1 rounded-full ${item?.like_usuario_actual ? "text-violet-600" : " text-gray-400 hover:bg-[rgba(78,124,233,0.2)]"} cursor-pointer `}
             />
           </button>
-          <button className="flex items-center gap-2 cursor-pointer">
+          <button
+            onClick={() => {
+              setItemSelect(item),
+              setShowModal()
+            }}
+            className="flex items-center gap-2 cursor-pointer"
+          >
             <Icon
               icon="line-md:chat"
               width="24"
@@ -72,7 +80,10 @@ export const PublicacionCard = ({ item }) => {
             </span>
           )}
           {item?.comentarios_count > 0 && (
-            <span className="text-xs text-gray-400 cursor-pointer hover:underline "> {item?.comentarios_count} Comentarios</span>
+            <span className="text-xs text-gray-400 cursor-pointer hover:underline ">
+              {" "}
+              {item?.comentarios_count} Comentarios
+            </span>
           )}
         </div>
       </div>
